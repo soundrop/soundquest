@@ -66,6 +66,8 @@ define(['area'], function(Area) {
         },
     
         load: function (basePath, name, loaded_callback, channels) {
+            return;
+
             var path = basePath + name + "." + this.extension,
                 sound = document.createElement('audio'),
                 self = this;
