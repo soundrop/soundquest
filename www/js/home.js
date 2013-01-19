@@ -7,11 +7,15 @@ requirejs.config({
         'text':         "lib/require.text",
         'jquery':       "lib/jquery",
         'underscore':   "lib/underscore",
-        'astar':        "lib/astar"
+        'astar':        "lib/astar",
+        'soundrop':     "lib/soundrop",
+        'soundrop.spotify':     "lib/soundrop.spotify",
     },
     shim: {
         'lcss':         { deps: ['less'] },
-        'jquery':       { exports: 'jQuery' }
+        'jquery':       { exports: 'jQuery' },
+        'soundrop':     { exports: 'soundrop' },
+        'soundrop.spotify': { exports: 'soundrop.spotify' },
     }
 });
 //>>excludeEnd("productionExclude");

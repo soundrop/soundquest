@@ -62,7 +62,7 @@ define(['jquery', 'area'], function($, Area) {
             this.data = map.data;
             this.blocking = map.blocking || [];
             this.plateau = map.plateau || [];
-            this.musicAreas = map.musicAreas || [];
+            this.spaceAreas = map.musicAreas || [];
             this.collisions = map.collisions;
             this.high = map.high;
             this.animated = map.animated;

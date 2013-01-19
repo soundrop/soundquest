@@ -1,8 +1,8 @@
 define(['bubble', 'renderer', 'map', 'animation', 'sprite', 'tile', 'updater',
-        'transition', 'pathfinder', 'npc', 'player', 'character', 'client', 'config',
+        'transition', 'pathfinder', 'npc', 'player', 'character', 'client', 'spaces', 'config',
         'gametypes'], function(BubbleManager, Renderer, Map, Animation, Sprite, AnimatedTile,
-         Updater, Transition, Pathfinder, Npc, Player, Character, Client, config) {
-    
+         Updater, Transition, Pathfinder, Npc, Player, Character, Client, SpaceManager, config) {
+
     var Game = Class.extend({
         init: function(app) {
             this.app = app;
@@ -16,7 +16,7 @@ define(['bubble', 'renderer', 'map', 'animation', 'sprite', 'tile', 'updater',
             this.pathfinder = null;
             this.chatinput = null;
             this.bubbleManager = null;
-            this.audioManager = null;
+            this.spaceManager = null;
         
             // Player
             this.player = new Player("player", "", Types.Entities.PLAYER);
@@ -370,18 +370,12 @@ define(['bubble', 'renderer', 'map', 'animation', 'sprite', 'tile', 'updater',
                 this.addToRenderingGrid(entity, x, y);
             }
         },
-    
-        loadAudio: function() {
-            // TODO: implement
-            //this.audioManager = new AudioManager(this);
-        },
-    
-        initMusicAreas: function() {
-            var self = this;
-            _.each(this.map.musicAreas, function(area) {
-                // TODO: implement
-                //self.audioManager.addArea(area.x, area.y, area.w, area.h, area.id);
-            });
+
+        initSpaceAreas: function() {
+            this.spaceManager = new SpaceManager(this);
+            _.each(this.map.spaceAreas, function(area) {
+                this.spaceManager.addArea(area.x, area.y, area.w, area.h, area.id);
+            }.bind(this));
         },
 
         run: function(credentials, started_callback) {
@@ -398,9 +392,7 @@ define(['bubble', 'renderer', 'map', 'animation', 'sprite', 'tile', 'updater',
                     self.ready = true;
                     log.debug('All sprites loaded.');
                             
-                    self.loadAudio();
-                    
-                    self.initMusicAreas();
+                    self.initSpaceAreas();
                     self.initCursors();
                     self.initAnimations();
                     self.initShadows();
@@ -468,7 +460,7 @@ define(['bubble', 'renderer', 'map', 'animation', 'sprite', 'tile', 'updater',
                 connecting = false; // always in dispatcher mode in the build version
     
             // TODO: client instance
-            this.client = new Client(config.host, config.clientId, "client-instance");
+            this.client = new Client(config.host, config.clientId);
 
             this.client.onConnected(function(sessionId, displayName) {
                 log.info("Starting client/server handshake");
@@ -483,7 +475,7 @@ define(['bubble', 'renderer', 'map', 'animation', 'sprite', 'tile', 'updater',
 
                 self.resetCamera();
                 self.updatePlateauMode();
-                //self.audioManager.updateMusic();
+                self.spaceManager.updateSpace();
 
             
                 self.addEntity(self.player);
@@ -516,6 +508,8 @@ define(['bubble', 'renderer', 'map', 'animation', 'sprite', 'tile', 'updater',
                     if(self.isZoningTile(self.player.gridX, self.player.gridY)) {
                         self.enqueueZoningFrom(self.player.gridX, self.player.gridY);
                     }
+
+                    self.spaceManager.updateSpace();
                 });
             
                 self.player.onStopPathing(function(x, y) {
