@@ -56,7 +56,6 @@ function(Camera, Item, Character, Player, Timer) {
         
             if(w <= 1000) {
                 scale = 2;
-                this.mobile = true;
             }
             else if(w <= 1500 || h <= 870) {
                 scale = 2;
