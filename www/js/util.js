@@ -1,3 +1,8 @@
+
+var isInt = function(n) {
+    return (n % 1) === 0;
+}
+
 var TRANSITIONEND = 'transitionend webkitTransitionEnd oTransitionEnd';
 
 // http://paulirish.com/2011/requestanimationframe-for-smart-animating/

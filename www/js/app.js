@@ -22,7 +22,8 @@ define(['jquery', 'storage'], function($, Storage) {
         tryStartingGame: function(credentials, starting_callback) {
             var self = this,
                 $play = this.$playButton;
-            
+           
+            log.debug("try starting game"); 
             if(!this.ready || !this.canStartGame()) {
                 $play.addClass('loading');
                 this.$playDiv.unbind('click');

@@ -21,6 +21,9 @@ define(['entity', 'transition', 'timer'], function(Entity, Transition, Timer) {
             this.path = null;
             this.newDestination = null;
             this.adjacentTiles = {};
+
+            this.target = null;
+            this.unconfirmedTarget = null;
         },
     
         clean: function() {
@@ -291,6 +294,42 @@ define(['entity', 'transition', 'timer'], function(Entity, Transition, Timer) {
                 return Types.Orientations.DOWN;
             }
         },
+        
+        /**
+         * Sets this character's attack target. It can only have one target at any time.
+         * @param {Character} character The target character.
+         */
+        setTarget: function(character) {
+            if(this.target !== character) { // If it's not already set as the target
+                if(this.hasTarget()) {
+                    this.removeTarget(); // Cleanly remove the previous one
+                }
+                this.unconfirmedTarget = null;
+                this.target = character;
+            } else {
+                log.debug(character.id + " is already the target of " + this.id);
+            }
+        },
+    
+        /**
+         * Removes the current attack target.
+         */
+        removeTarget: function() {
+            var self = this;
+        
+            if(this.target) {
+                this.target = null;
+            }
+        },
+    
+        /**
+         * Returns true if this character has a current attack target.
+         * @returns {Boolean} Whether this character has a target.
+         */
+        hasTarget: function() {
+            return !(this.target === null);
+        },
+
 
         onHasMoved: function(callback) {
             this.hasmoved_callback = callback;

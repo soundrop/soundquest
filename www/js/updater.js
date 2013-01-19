@@ -25,7 +25,6 @@ define(['character', 'timer'], function(Character, Timer) {
                 if(entity.isLoaded) {
                     if(isCharacter) {
                         self.updateCharacter(entity);
-                        self.game.onCharacterUpdate(entity);
                     }
                     self.updateEntityFading(entity);
                 }

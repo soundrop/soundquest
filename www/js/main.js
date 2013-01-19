@@ -61,7 +61,7 @@ define(['jquery', 'app', 'detect'], function($, App, Detect) {
             });
         
             $('.play div').click(function(event) {
-                app.tryStartingGame("TODO: name");
+                app.tryStartingGame("TODO: credentials");
             });
         
             $('#resize-check').bind("transitionend", app.resizeUi.bind(app));

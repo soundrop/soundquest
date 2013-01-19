@@ -361,16 +361,12 @@ define(['bubble', 'renderer', 'map', 'animation', 'sprite', 'tile', 'updater',
                 y = entity.gridY;
         
             if(entity) {
-                if(entity instanceof Character || entity instanceof Chest) {
+                if(entity instanceof Character) {
                     this.entityGrid[y][x][entity.id] = entity;
                     if(!(entity instanceof Player)) {
                         this.pathingGrid[y][x] = 1;
                     }
                 }
-                if(entity instanceof Item) {
-                    this.itemGrid[y][x][entity.id] = entity;
-                }
-            
                 this.addToRenderingGrid(entity, x, y);
             }
         },
@@ -473,18 +469,17 @@ define(['bubble', 'renderer', 'map', 'animation', 'sprite', 'tile', 'updater',
     
             // TODO: client instance
             this.client = new Client(config.host, config.clientId, "client-instance");
-            this.client.connect(credentials);
 
             this.client.onConnected(function(sessionId, displayName) {
                 log.info("Starting client/server handshake");
                 
-                self.playerId = id;
+                self.playerId = sessionId;
                 self.player.id = sessionId;
                 self.player.name = displayName;
 
                 self.started = true;
 
-                self.player.setGridPosition(0, 0); // TODO: put at the right place
+                self.player.setGridPosition(37, 228); // TODO: put at the right place
 
                 self.resetCamera();
                 self.updatePlateauMode();
@@ -583,13 +578,12 @@ define(['bubble', 'renderer', 'map', 'animation', 'sprite', 'tile', 'updater',
                     }
                 });
             
-                self.gamestart_callback();
-            
                 if(self.hasNeverStarted) {
                     self.start();
                     started_callback();
                 }
             });
+            this.client.connect(credentials);
         },
 
         /**
@@ -750,9 +744,7 @@ define(['bubble', 'renderer', 'map', 'animation', 'sprite', 'tile', 'updater',
                 entity = null;
             if(_.size(entities) > 0) {
                 entity = entities[_.keys(entities)[0]];
-            } else {
-                entity = this.getItemAt(x, y);
-            }
+            } 
             return entity;
         },
 
@@ -1061,10 +1053,6 @@ define(['bubble', 'renderer', 'map', 'animation', 'sprite', 'tile', 'updater',
             }
         },
     
-        onGameStart: function(callback) {
-            this.gamestart_callback = callback;
-        },
-        
         onDisconnect: function(callback) {
             this.disconnect_callback = callback;
         },

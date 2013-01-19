@@ -8,7 +8,7 @@ define(function() {
 
         connect: function(credentials) {
             if(this.connected_callback) {
-                self.connected_callback("sessionId", "John Doe");
+                this.connected_callback("sessionId", "John Doe");
             }
         },
 
