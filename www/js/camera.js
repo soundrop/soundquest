@@ -12,7 +12,7 @@ define(function() {
         },
     
         rescale: function() {
-            var factor = 1;
+            var factor = this.renderer.limitedViewport ? 1 : 2;
         
             this.gridW = 15 * factor;
             this.gridH = 7 * factor;

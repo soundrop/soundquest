@@ -1,11 +1,13 @@
 //>>excludeStart("productionExclude", pragmas.productionExclude);
 requirejs.config({
-    baseUrl: "/js",
+    baseUrl: "./js",
+    urlArgs: "_=" +  (new Date()).getTime(),
     paths: {
         'class':        "lib/class",
         'text':         "lib/require.text",
         'jquery':       "lib/jquery",
-        'underscore':   "lib/underscore"
+        'underscore':   "lib/underscore",
+        'astar':        "lib/astar"
     },
     shim: {
         'lcss':         { deps: ['less'] },
@@ -13,6 +15,6 @@ requirejs.config({
     }
 });
 //>>excludeEnd("productionExclude");
-define(['class', 'util', 'gametypes'], function() {
+define(['class', 'util', 'underscore'], function() {
     require(["main"]);
 });

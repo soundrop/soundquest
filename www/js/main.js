@@ -1,6 +1,6 @@
-define(['jquery', 'app'], function($, App) {
+define(['jquery', 'app', 'detect'], function($, App, Detect) {
     var app, game;
-
+ 
     var initApp = function() {
         $(document).ready(function() {
             app = new App();
@@ -36,10 +36,6 @@ define(['jquery', 'app'], function($, App) {
                 app.hideWindows();
             });
             
-            $('#playercount').click(function() {
-                app.togglePopulationInfo();
-            });
-    
             $('.clickable').click(function(event) {
                 event.stopPropagation();
             });
@@ -96,33 +92,6 @@ define(['jquery', 'app'], function($, App) {
                 $('#death').find('p').html(message+"<em>Please reload the page.</em>");
             });
 
-            // TODO: fix
-            game.onNbPlayersChange(function(worldPlayers, totalPlayers) {
-                var setWorldPlayersString = function(string) {
-                        $("#instance-population").find("span:nth-child(2)").text(string);
-                        $("#playercount").find("span:nth-child(2)").text(string);
-                    },
-                    setTotalPlayersString = function(string) {
-                        $("#world-population").find("span:nth-child(2)").text(string);
-                    };
-                
-                $("#playercount").find("span.count").text(worldPlayers);
-                
-                $("#instance-population").find("span").text(worldPlayers);
-                if(worldPlayers == 1) {
-                    setWorldPlayersString("player");
-                } else {
-                    setWorldPlayersString("players");
-                }
-                
-                $("#world-population").find("span").text(totalPlayers);
-                if(totalPlayers == 1) {
-                    setTotalPlayersString("player");
-                } else {
-                    setTotalPlayersString("players");
-                }
-            });
-    
             game.onNotification(function(message) {
                 app.showMessage(message);
             });

@@ -21,9 +21,6 @@ define(['entity', 'transition', 'timer'], function(Entity, Transition, Timer) {
             this.path = null;
             this.newDestination = null;
             this.adjacentTiles = {};
-        
-            // Modes
-            this.followingMode = false;
         },
     
         clean: function() {
@@ -112,10 +109,6 @@ define(['entity', 'transition', 'timer'], function(Entity, Transition, Timer) {
             if(path.length > 1) { // Length of 1 means the player has clicked on himself
                 this.path = path;
                 this.step = 0;
-            
-                if(this.followingMode) { // following a character
-                    path.pop();
-                }
             
                 if(this.start_pathing_callback) {
                     this.start_pathing_callback(path);
@@ -253,13 +246,6 @@ define(['entity', 'transition', 'timer'], function(Entity, Transition, Timer) {
          * 
          */
         go: function(x, y) {
-            if(this.isAttacking()) {
-                this.disengage();
-            }
-            else if(this.followingMode) {
-                this.followingMode = false;
-                this.target = null;
-            }
             this.moveTo_(x, y);
         },
     
@@ -268,7 +254,6 @@ define(['entity', 'transition', 'timer'], function(Entity, Transition, Timer) {
          */
         follow: function(entity) {
             if(entity) {
-                this.followingMode = true;
                 this.moveTo_(entity.gridX, entity.gridY);
             }
         },

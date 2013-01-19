@@ -1,4 +1,4 @@
-define(['camera', 'character', 'player', 'timer'], function(Camera, Character, Player, Timer) {
+define(['detect', 'camera', 'character', 'player', 'timer'], function(Detect, Camera, Character, Player, Timer) {
 
     var Renderer = Class.extend({
         init: function(game, canvas, background, foreground) {
@@ -28,8 +28,6 @@ define(['camera', 'character', 'player', 'timer'], function(Camera, Character, P
             this.animatedTileCount = 0;
             this.highTileCount = 0;
         
-            this.tablet = Detect.isTablet(window.innerWidth);
-            
             this.fixFlickeringTimer = new Timer(100);
         },
     
@@ -50,7 +48,7 @@ define(['camera', 'character', 'player', 'timer'], function(Camera, Character, P
                 h = window.innerHeight,
                 scale;
         
-            this.mobile = false;
+            this.limitedViewport = false;
         
             if(w <= 1000) {
                 scale = 2;
@@ -103,7 +101,7 @@ define(['camera', 'character', 'player', 'timer'], function(Camera, Character, P
         },
     
         initFPS: function() {
-            this.FPS = this.mobile ? 50 : 50;
+            this.FPS = this.limitedViewport ? 50 : 50;
         },
     
         initFont: function() {
@@ -226,7 +224,7 @@ define(['camera', 'character', 'player', 'timer'], function(Camera, Character, P
                 ds = this.upscaledRendering ? this.scale : 1;
         
             if(this.game.selectedCellVisible) {
-                if(this.mobile || this.tablet) {
+                if(this.limitedViewport || this.tablet) {
                     if(this.game.drawTarget) {
                         var x = this.game.selectedX,
                             y = this.game.selectedY;
@@ -349,7 +347,7 @@ define(['camera', 'character', 'player', 'timer'], function(Camera, Character, P
                     this.context.globalAlpha = entity.fadingAlpha;
                 }
             
-                if(!this.mobile && !this.tablet) {
+                if(!this.limitedViewport && !this.tablet) {
                     this.drawEntityName(entity);
                 }
             
@@ -375,24 +373,6 @@ define(['camera', 'character', 'player', 'timer'], function(Camera, Character, P
                     }
                 
                     this.context.drawImage(sprite.image, x, y, w, h, ox, oy, dw, dh);
-                }
-            
-                if(entity instanceof Character && !entity.isDead && entity.hasWeapon()) {
-                    var weapon = this.game.sprites[entity.getWeaponName()];
-        
-                    if(weapon) {
-                        var weaponAnimData = weapon.animationData[anim.name],
-                            index = frame.index < weaponAnimData.length ? frame.index : frame.index % weaponAnimData.length;
-                            wx = weapon.width * index * os,
-                            wy = weapon.height * anim.row * os,
-                            ww = weapon.width * os,
-                            wh = weapon.height * os;
-
-                        this.context.drawImage(weapon.image, wx, wy, ww, wh,
-                                               weapon.offsetX * s,
-                                               weapon.offsetY * s,
-                                               ww * ds, wh * ds);
-                    }
                 }
             
                 this.context.restore();
@@ -466,14 +446,7 @@ define(['camera', 'character', 'player', 'timer'], function(Camera, Character, P
         getEntityBoundingRect: function(entity) {
             var rect = {},
                 s = this.scale,
-                spr;
-                
-            if(entity instanceof Player && entity.hasWeapon()) {
-                var weapon = this.game.sprites[entity.getWeaponName()];
-                spr = weapon;
-            } else {
                 spr = entity.sprite;
-            }
     
             if(spr) {
                 rect.x = (entity.x + spr.offsetX - this.camera.x) * s;
@@ -623,22 +596,6 @@ define(['camera', 'character', 'player', 'timer'], function(Camera, Character, P
             }
         },
     
-        drawCombatInfo: function() {
-            var self = this;
-        
-            switch(this.scale) {
-                case 2: this.setFontSize(20); break;
-                case 3: this.setFontSize(30); break;
-            }
-            this.game.infoManager.forEachInfo(function(info) {
-                self.context.save();
-                self.context.globalAlpha = info.opacity;
-                self.drawText(info.value, (info.x + 8) * self.scale, Math.floor(info.y * self.scale), true, info.fillColor, info.strokeColor);
-                self.context.restore();
-            });
-            this.initFont();
-        },
-    
         setCameraView: function(ctx) {
             ctx.translate(-this.camera.x * this.scale, -this.camera.y * this.scale);
         },
@@ -652,20 +609,13 @@ define(['camera', 'character', 'player', 'timer'], function(Camera, Character, P
                 ctx = canvas.getContext('2d'),
                 os = this.upscaledRendering ? 1 : this.scale,
                 player = this.game.player,
-                sprite = player.getArmorSprite(),
+                sprite = player.sprite,
                 spriteAnim = sprite.animationData["idle_down"],
                 // character
                 row = spriteAnim.row,
                 w = sprite.width * os,
                 h = sprite.height * os,
                 y = row * h,
-                // weapon
-                weapon = this.game.sprites[this.game.player.getWeaponName()],
-                ww = weapon.width * os,
-                wh = weapon.height * os,
-                wy = wh * row,
-                offsetX = (weapon.offsetX - sprite.offsetX) * os,
-                offsetY = (weapon.offsetY - sprite.offsetY) * os,
                 // shadow
                 shadow = this.game.shadows["small"],
                 sw = shadow.width * os,
@@ -690,7 +640,7 @@ define(['camera', 'character', 'player', 'timer'], function(Camera, Character, P
                 this.drawTerrain();
             this.background.restore();
         
-            if(this.mobile || this.tablet) {
+            if(this.limitedViewport) {
                 this.clearScreen(this.foreground);
                 this.foreground.save();
                     this.setCameraView(this.foreground);
@@ -700,15 +650,15 @@ define(['camera', 'character', 'player', 'timer'], function(Camera, Character, P
         },
 
         renderFrame: function() {
-            if(this.mobile || this.tablet) {
-                this.renderFrameMobile();
+            if(this.limitedViewport) {
+                this.renderFrameLimited();
             }
             else {
-                this.renderFrameDesktop();
+                this.renderFrameFull();
             }
         },
     
-        renderFrameDesktop: function() {
+        renderFrameFull: function() {
             this.clearScreen(this.context);
         
             this.context.save();
@@ -723,7 +673,6 @@ define(['camera', 'character', 'player', 'timer'], function(Camera, Character, P
                 //this.drawOccupiedCells();
                 this.drawPathingCells();
                 this.drawEntities();
-                this.drawCombatInfo();
                 this.drawHighTiles(this.context);
             this.context.restore();
         
@@ -732,7 +681,7 @@ define(['camera', 'character', 'player', 'timer'], function(Camera, Character, P
             this.drawDebugInfo();
         },
     
-        renderFrameMobile: function() {
+        renderFrameLimited: function() {
             this.clearDirtyRects();
             this.preventFlickeringBug();
 

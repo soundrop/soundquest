@@ -19,51 +19,48 @@ define(['jquery', 'storage'], function($, Storage) {
             return (this.game && this.game.map && this.game.map.isLoaded);
         },
         
-        tryStartingGame: function(username, starting_callback) {
+        tryStartingGame: function(credentials, starting_callback) {
             var self = this,
                 $play = this.$playButton;
             
-            if(username !== '') {
-                if(!this.ready || !this.canStartGame()) {
-                    $play.addClass('loading');
-                    this.$playDiv.unbind('click');
-                    var watchCanStart = setInterval(function() {
-                        log.debug("waiting...");
-                        if(self.canStartGame()) {
-                            setTimeout(function() {
-                                $play.removeClass('loading');
-                            }, 1500);
-                            clearInterval(watchCanStart);
-                            self.startGame(username, starting_callback);
-                        }
-                    }, 100);
-                } else {
-                    this.$playDiv.unbind('click');
-                    this.startGame(username, starting_callback);
-                }      
-            }
+            if(!this.ready || !this.canStartGame()) {
+                $play.addClass('loading');
+                this.$playDiv.unbind('click');
+                var watchCanStart = setInterval(function() {
+                    log.debug("waiting...");
+                    if(self.canStartGame()) {
+                        setTimeout(function() {
+                            $play.removeClass('loading');
+                        }, 1500);
+                        clearInterval(watchCanStart);
+                        self.startGame(credentials, starting_callback);
+                    }
+                }, 100);
+            } else {
+                this.$playDiv.unbind('click');
+                this.startGame(credentials, starting_callback);
+            }      
         },
         
-        startGame: function(username, starting_callback) {
+        startGame: function(credentials, starting_callback) {
             var self = this;
             
             if(starting_callback) {
                 starting_callback();
             }
             this.hideIntro(function() {
-                self.start(username);
+                self.start(credentials);
             });
         },
 
-        start: function(username) {
+        start: function(credentials) {
             var self = this,
                 firstTimePlaying = !self.storage.hasAlreadyPlayed();
             
-            if(username && !this.game.started) {
+            if(!this.game.started) {
                 var config = this.config;
 
-                this.game.setServerOptions(config.host, config.port, username);
-                this.game.run(function() {
+                this.game.run(credentials, function() {
                     $('body').addClass('started');
                     if(firstTimePlaying) {
                         self.toggleInstructions();
