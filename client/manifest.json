@@ -2,23 +2,26 @@
 	"AppName": {
 		"en": "SoundQuest"
 	},
-	"AppURL": "http://www.soundquest.fm/",
+	"AppIcon": {
+		"36x18": "soundrop-icon-18.png"
+	},
 	"AppDescription": {
-		"en": "SoundQuest",
+		"en": "SoundQuest"
 	},
 	"BundleIdentifier": "soundquest",
-	"BundleVersion": "1.0",
+	"BundleVersion": "0.1",
 	"BundleType": "Application",
-	"BundleCopyright": "2013 Soundrop AS. All rights reserved.",
+	"BundleCopyright": "2013 SoundQuest team. All rights reserved.",
 	"VendorIdentifier": "com.soundquest",
-	"VendorName": "Soundrop AS",
-	"VendorURL": "http://www.soundquest.com/",
-	"SupportedLanguages": [ "en" ],
+	"VendorName": "SoundQuest team",
+	"SupportedLanguages": [
+		"en"
+	],
 	"RequiredInterface": 1,
 	"Dependencies": {
-		"api": "1.0.0"
+		"api": "0.1.0",
+		"resources": "0.2.2"
 	},
-	"AcceptedLinkTypes": [ "track", "playlist" ],
 	"RequiredPermissions": [
 		"http://*.soundquest.dev",
 		"https://*.soundquest.dev",
@@ -26,15 +29,13 @@
 		"https://*.soundrop.fm",
 		"http://*.soundrop.com",
 		"https://*.soundrop.com",
+		"http://*.jquery.com",
+		"https://*.jquery.com",
 		"http://*.facebook.com",
 		"https://*.facebook.com",
 		"http://*.twitter.com",
 		"https://*.twitter.com",
 		"http://*.twimg.com",
-		"https://*.twimg.com",
-		"http://*.yahooapis.com",
-		"http://*.google-analytics.com",
-		"https://*.google-analytics.com"
+		"https://*.twimg.com"
 	]
 }
-
