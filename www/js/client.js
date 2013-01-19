@@ -1,4 +1,4 @@
-define(["soundrop"], function(soundrop) {
+define(["soundrop", "soundrop.spotify"], function(soundrop) {
     function randomId() {
             var text = "";
             var possible = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
@@ -8,6 +8,62 @@ define(["soundrop"], function(soundrop) {
             }
 
             return text;
+    }
+
+    function getTracks(playback, items) {
+        var current, upcoming;
+        if (playback) {
+            var startIndex;
+            var currentId = playback.item._id;
+            for (var i = 0; i != items.length; i++) {
+                if (items[i]._id === currentId) {
+                    startIndex = i;
+                    break;
+                }
+            }
+
+            var size = items.length;
+            current = items[startIndex];
+            upcoming = [];
+            for (var i = startIndex + 1; i != startIndex + size; i++)
+                upcoming.push(items[i % size]);
+        } else {
+            current = null;
+            upcoming = items.slice(0);
+        }
+
+        var itemUris = function(item) {
+            var uris = [];
+            var sources = item.track.sources;
+            for (var i = 0; i != sources.length; i++)
+                uris.push.apply(uris, sources[i].uris);
+            return uris;
+        };
+        var itemLength = function(item) {
+            var source = item.track.sources.filter(function (source) {
+                return source.uris.some(function (uri) {
+                    return uri === item.uri;
+                });
+            })[0];
+            return source.length;
+        };
+
+        var tracks = [];
+        if (current) {
+            tracks.push({
+                uris: itemUris(current),
+                length: itemLength(current)
+            });
+            for (var i = 0; i != items.length; i++) {
+                var item = items[i];
+                tracks.push({
+                    uris: itemUris(item),
+                    length: itemLength(item)
+                });
+            }
+        }
+
+        return tracks;
     }
 
     var Client = Class.extend({
@@ -22,6 +78,12 @@ define(["soundrop"], function(soundrop) {
             this.connected_callback = null;
             this.disconnected_callback = null;
             this.chat_callback = null;
+
+            var playback = new soundrop.spotify.Playback();
+            this.playback = playback.pushContext('current');
+            this.playback.callbacks.onPlaying = function (track) {};
+            this.playback.callbacks.onPaused = function (reason) {};
+            this.playback.callbacks.onStopped = function () {};
         },
 
         connect: function(credentials) {
@@ -67,18 +129,15 @@ define(["soundrop"], function(soundrop) {
 
                         space.join().done(function() {
                             var playlist = space.getApplication('soundrop:playlist');
-                            playlist.on('play', function(item, offset) {
-                                console.log('playing: ' + item.uri + ', at: ' + offset);
-                            });
-                            playlist.on('sync', function() {
-                                var itemId = playlist.playback.item._id;
-                                var offset = new Date().getTime() - playlist.playback.started.getTime();
+                            var sync = function() {
                                 playlist.items.get().done(function(items) {
-                                    var item = _.find(items, function(item) {return item._id === itemId;});
-                                    console.log('playing(sync): ' + item.uri + ', at: ' + offset);
-                                });
-                            });
-                        });
+                                    var tracks = getTracks(playlist.playback, items);
+                                    this.playback.sync(tracks, playlist.playback.started);
+                                }.bind(this));
+                            }.bind(this);
+                            playlist.on('sync', sync);
+                            playlist.on('play', sync);
+                        }.bind(this));
                     }
                     else {
                         this.client.spaces.unget(spaceId);
@@ -93,6 +152,7 @@ define(["soundrop"], function(soundrop) {
 
                 this.space.leave();
                 this.space = null;
+                this.playback.sync([]);
             }
             this.spaceId = null;
         },

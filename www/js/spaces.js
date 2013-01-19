@@ -7,7 +7,9 @@ define(["area"], function(Area) {
             this.areas = [];
 
             this.spaceIds = {
-                "village": "VhzLPcWDnXhakl0c"
+                "village": "VhzLPcWDnXhakl0c",
+                "forest": "VhzLPcWDnXhakl0a",
+                "beach": "VqE1Yk4y4PpnPxnE",
             };
         },
 
