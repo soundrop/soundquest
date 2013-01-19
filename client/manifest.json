@@ -1,0 +1,40 @@
+{
+	"AppName": {
+		"en": "SoundQuest"
+	},
+	"AppURL": "http://www.soundquest.fm/",
+	"AppDescription": {
+		"en": "SoundQuest",
+	},
+	"BundleIdentifier": "soundquest",
+	"BundleVersion": "1.0",
+	"BundleType": "Application",
+	"BundleCopyright": "2013 Soundrop AS. All rights reserved.",
+	"VendorIdentifier": "com.soundquest",
+	"VendorName": "Soundrop AS",
+	"VendorURL": "http://www.soundquest.com/",
+	"SupportedLanguages": [ "en" ],
+	"RequiredInterface": 1,
+	"Dependencies": {
+		"api": "1.0.0"
+	},
+	"AcceptedLinkTypes": [ "track", "playlist" ],
+	"RequiredPermissions": [
+		"http://*.soundquest.dev",
+		"https://*.soundquest.dev",
+		"http://*.soundrop.fm",
+		"https://*.soundrop.fm",
+		"http://*.soundrop.com",
+		"https://*.soundrop.com",
+		"http://*.facebook.com",
+		"https://*.facebook.com",
+		"http://*.twitter.com",
+		"https://*.twitter.com",
+		"http://*.twimg.com",
+		"https://*.twimg.com",
+		"http://*.yahooapis.com",
+		"http://*.google-analytics.com",
+		"https://*.google-analytics.com"
+	]
+}
+
