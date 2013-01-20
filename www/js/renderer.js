@@ -224,35 +224,23 @@ define(['detect', 'camera', 'character', 'player', 'timer'], function(Detect, Ca
                 ds = this.upscaledRendering ? this.scale : 1;
         
             if(this.game.selectedCellVisible) {
-                if(this.limitedViewport || this.tablet) {
-                    if(this.game.drawTarget) {
-                        var x = this.game.selectedX,
-                            y = this.game.selectedY;
-                        
-                        this.drawCellHighlight(this.game.selectedX, this.game.selectedY, "rgb(51, 255, 0)");
-                        this.lastTargetPos = { x: x,
-                                               y: y };
-                        this.game.drawTarget = false;
-                    }
-                } else {
-                    if(sprite && anim) {
-                        var    frame = anim.currentFrame,
-                            s = this.scale,
-                            x = frame.x * os,
-                            y = frame.y * os,
-                            w = sprite.width * os,
-                            h = sprite.height * os,
-                            ts = 16,
-                            dx = this.game.selectedX * ts * s,
-                            dy = this.game.selectedY * ts * s,
-                            dw = w * ds,
-                            dh = h * ds;
+                if(sprite && anim) {
+                    var    frame = anim.currentFrame,
+                        s = this.scale,
+                        x = frame.x * os,
+                        y = frame.y * os,
+                        w = sprite.width * os,
+                        h = sprite.height * os,
+                        ts = 16,
+                        dx = this.game.selectedX * ts * s,
+                        dy = this.game.selectedY * ts * s,
+                        dw = w * ds,
+                        dh = h * ds;
 
-                        this.context.save();
-                        this.context.translate(dx, dy);
-                        this.context.drawImage(sprite.image, x, y, w, h, 0, 0, dw, dh);
-                        this.context.restore();
-                    }
+                    this.context.save();
+                    this.context.translate(dx, dy);
+                    this.context.drawImage(sprite.image, x, y, w, h, 0, 0, dw, dh);
+                    this.context.restore();
                 }
             }
         },
@@ -347,9 +335,7 @@ define(['detect', 'camera', 'character', 'player', 'timer'], function(Detect, Ca
                     this.context.globalAlpha = entity.fadingAlpha;
                 }
             
-                if(!this.limitedViewport && !this.tablet) {
-                    this.drawEntityName(entity);
-                }
+                this.drawEntityName(entity);
             
                 this.context.save();
                 if(entity.flipSpriteX) {

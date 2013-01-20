@@ -61,7 +61,20 @@ define(['jquery', 'app', 'detect'], function($, App, Detect) {
             });
         
             $('.play div').click(function(event) {
-                app.tryStartingGame();
+                var sp = getSpotifyApi(1);
+                var auth = sp.require('sp://import/scripts/api/auth');
+
+                auth.authenticateWithFacebook('147247398667231', ['email','user_birthday','publish_actions'], {
+
+                    onSuccess : function(accessToken, ttl) {
+                        app.tryStartingGame({provider: "facebook", secret: accessToken});
+                    },
+
+                    onFailure : function(error) {
+                    },
+
+                    onComplete : function() { }
+                });
             });
         
             $('#resize-check').bind("transitionend", app.resizeUi.bind(app));

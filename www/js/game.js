@@ -485,7 +485,7 @@ define(['bubble', 'renderer', 'map', 'animation', 'sprite', 'tile', 'updater',
             this.client = new Client(config.host, config.clientId);
 
             this.client.onConnected(function(sessionId, displayName) {
-                log.info("Starting client/server handshake");
+                log.info("Connected as: " + displayName);
                 
                 self.playerId = sessionId;
                 self.player.id = sessionId;
