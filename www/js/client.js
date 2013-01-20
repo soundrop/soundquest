@@ -77,6 +77,7 @@ define(["soundrop", "soundrop.spotify"], function(soundrop) {
 
             this.connected_callback = null;
             this.disconnected_callback = null;
+            this.space_joined_callback = null;
             this.chat_callback = null;
 
             var playback = new soundrop.spotify.Playback();
@@ -137,6 +138,10 @@ define(["soundrop", "soundrop.spotify"], function(soundrop) {
                             }.bind(this);
                             playlist.on('sync', sync);
                             playlist.on('play', sync);
+
+                            if(this.space_joined_callback) {
+                                this.space_joined_callback(space);
+                            }
                         }.bind(this));
                     }
                     else {
@@ -166,6 +171,10 @@ define(["soundrop", "soundrop.spotify"], function(soundrop) {
 
         onDisconnected: function(callback) {
             this.disconnected_callback = callback;
+        },
+
+        onSpaceJoined: function(callback) {
+            this.space_joined_callback = callback;
         },
 
         onChatMessage: function(callback) {

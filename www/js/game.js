@@ -581,6 +581,10 @@ define(['bubble', 'renderer', 'map', 'animation', 'sprite', 'tile', 'updater',
                 self.player.onHasMoved(function(player) {
                     self.assignBubbleTo(player);
                 });
+
+                self.client.onSpaceJoined(function(space) {
+                    this.showNotification("You are now in <strong>" + space.get('display_name') + "</strong>");
+                }.bind(self));
             
                 self.client.onChatMessage(function(entityId, message) {
                     var entity = self.getEntityById(entityId);

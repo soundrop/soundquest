@@ -63,9 +63,6 @@ define(['jquery', 'storage'], function($, Storage) {
 
                 this.game.run(credentials, function() {
                     $('body').addClass('started');
-                    if(firstTimePlaying) {
-                        self.toggleInstructions();
-                    }
                 });
             }
         },
@@ -230,8 +227,8 @@ define(['jquery', 'storage'], function($, Storage) {
             var message = $('#message2').text();
 
             $('#notifications div').removeClass('top');
-            $('#message2').text('');
-            $('#message1').text(message);
+            $('#message2').html('');
+            $('#message1').html(message);
         },
 
         showMessage: function(message) {
