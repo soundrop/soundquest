@@ -120,7 +120,7 @@ define(['bubble', 'renderer', 'map', 'animation', 'sprite', 'tile', 'updater',
                         pos = this.map.tileIndexToGridPosition(tid),
                         entity = EntityFactory.createEntity(kind, '8'+pos.x+''+pos.y);
 
-                    log.debug(kind);
+                    kindName = entity.itemKind;
                     entity.setSprite(this.sprites[kindName]);
                     entity.setGridPosition(pos.x, pos.y);
                     entity.setOrientation(Types.Orientations.DOWN);

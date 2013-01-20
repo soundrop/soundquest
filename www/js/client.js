@@ -81,6 +81,7 @@ define(["soundrop", "soundrop.spotify"], function(soundrop) {
             this.chat_callback = null;
 
             var playback = new soundrop.spotify.Playback();
+            this.playback_service = playback;
             this.playback = playback.pushContext('current');
             this.playback.callbacks.onPlaying = function (track) {};
             this.playback.callbacks.onPaused = function (reason) {};
@@ -134,10 +135,12 @@ define(["soundrop", "soundrop.spotify"], function(soundrop) {
                                 playlist.items.get().done(function(items) {
                                     var tracks = getTracks(playlist.playback, items);
                                     this.playback.sync(tracks, playlist.playback.started);
+                                    this.playback_service.play();
                                 }.bind(this));
                             }.bind(this);
                             playlist.on('sync', sync);
                             playlist.on('play', sync);
+                            sync();
 
                             if(this.space_joined_callback) {
                                 this.space_joined_callback(space);

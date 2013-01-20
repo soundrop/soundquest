@@ -1,13 +1,29 @@
 define(['npcs'], function(NPCs) {
 
-    var EntityFactory = {};
+    var EntityFactory = {},
+        randomNpcKinds = [
+            Types.Entities.GUARD,
+            Types.Entities.KING,
+            Types.Entities.CODER,
+            Types.Entities.PRIEST,
+            Types.Entities.SORCERER,
+            Types.Entities.BEACHNPC,
+            Types.Entities.OCTOCAT,
+            Types.Entities.DESERTNPC
+        ];
 
     EntityFactory.createEntity = function(kind, id, name) {
         if(!kind) {
             log.error("kind is undefined", true);
             return;
         }
-    
+
+        // logic for the random NPCs
+        if (kind == Types.Entities.OCTOCAT) {
+            var randomKind = randomNpcKinds[Math.floor(Math.random() * randomNpcKinds.length)];
+            return EntityFactory.builders[randomKind](id, name);
+        }
+
         if(!_.isFunction(EntityFactory.builders[kind])) {
             throw Error(kind + " is not a valid Entity type");
         }
