@@ -5,7 +5,6 @@ var Log = require('log'),
     Types = require("../../www/js/gametypes");
 
 var map,
-    mode,
     collidingTiles = {},
     staticEntities = {},
     mobsFirstgid;
@@ -22,25 +21,15 @@ module.exports = function processMap(json, options) {
             height: 0,
             collisions: [],
             doors: [],
-            checkpoints: []
+            checkpoints: [],
+            data: [],
+            high: [],
+            animated: {},
+            blocking: [],
+            plateau: [],
+            musicAreas: [],
+            staticEntities: {}
         };
-    mode = options.mode;
-    
-    if(mode === "client") {
-        map.data = [];
-        map.high = [];
-        map.animated = {};
-        map.blocking = [];
-        map.plateau = [];
-        map.musicAreas = [];
-    }
-    if(mode === "server") {
-        map.roamingAreas = [];
-        map.chestAreas = [];
-        map.staticChests = [];
-        map.staticEntities = {};
-    }
-    
     log.info("Processing map info...");
     map.width = Tiled.width;
     map.height = Tiled.height;
@@ -53,22 +42,20 @@ module.exports = function processMap(json, options) {
             collidingTiles[id] = true;
         }
         
-        if(mode === "client") {
-            if(property.name === "v") {
-                map.high.push(id);
+        if(property.name === "v") {
+            map.high.push(id);
+        }
+        if(property.name === "length") {
+            if(!map.animated[id]) {
+                map.animated[id] = {};
             }
-            if(property.name === "length") {
-                if(!map.animated[id]) {
-                    map.animated[id] = {};
-                }
-                map.animated[id].l = property.value;
+            map.animated[id].l = property.value;
+        }
+        if(property.name === "delay") {
+            if(!map.animated[id]) {
+                map.animated[id] = {};
             }
-            if(property.name === "delay") {
-                if(!map.animated[id]) {
-                    map.animated[id] = {};
-                }
-                map.animated[id].d = property.value;
-            }
+            map.animated[id].d = property.value;
         }
     }
     
@@ -89,7 +76,7 @@ module.exports = function processMap(json, options) {
                     }
                 }
             }
-            else if(tileset.name === "Mobs" && mode === "server") {
+            else if(tileset.name === "Mobs") {
                 log.info("Processing static entity properties...");
                 mobsFirstgid = tileset.firstgid;
                 _.each(tileset.tile, function(p) {
@@ -128,61 +115,7 @@ module.exports = function processMap(json, options) {
 
     // Object layers
     _.each(Tiled.objectgroup, function(objectlayer) {
-        if(objectlayer.name === "roaming" && mode === "server") {
-            log.info("Processing roaming areas...");
-            var areas = objectlayer.object;
-    
-            for(var i=0; i < areas.length; i += 1) {
-                if(areas[i].properties) {
-                    var nb = areas[i].properties.property.value;
-                }
-        
-                map.roamingAreas[i] = {  id: i,
-                                         x: areas[i].x / 16,
-                                         y: areas[i].y / 16,
-                                         width: areas[i].width / 16,
-                                         height: areas[i].height / 16,
-                                         type: areas[i].type,
-                                         nb: nb
-                                       };
-            }
-        }
-        else if(objectlayer.name === "chestareas" && mode === "server") {
-            log.info("Processing chest areas...");
-            _.each(objectlayer.object, function(area) {
-                var chestArea = {
-                    x: area.x / map.tilesize,
-                    y: area.y / map.tilesize,
-                    w: area.width / map.tilesize,
-                    h: area.height / map.tilesize
-                };
-                _.each(area.properties.property, function(prop) {
-                    if(prop.name === 'items') {
-                        chestArea['i'] = _.map(prop.value.split(','), function(name) { 
-                            return Types.getKindFromString(name);
-                        });
-                    } else {
-                        chestArea['t'+prop.name] = prop.value;
-                    }
-                });
-                map.chestAreas.push(chestArea);
-            });
-        }
-        else if(objectlayer.name === "chests" && mode === "server") {
-            log.info("Processing static chests...");
-            _.each(objectlayer.object, function(chest) {
-                var items = chest.properties.property.value;
-                var newChest = {
-                    x: chest.x / map.tilesize,
-                    y: chest.y / map.tilesize,
-                    i: _.map(items.split(','), function(name) {
-                        return Types.getKindFromString(name);
-                    })
-                };
-                map.staticChests.push(newChest);
-            });
-        }
-        else if(objectlayer.name === "music" && mode === "client") {
+        if(objectlayer.name === "music") {
             log.info("Processing music areas...");
             _.each(objectlayer.object, function(music) {
                 var musicArea = {
@@ -193,23 +126,6 @@ module.exports = function processMap(json, options) {
                     id: music.properties.property.value
                 };
                 map.musicAreas.push(musicArea);
-            });
-        }
-        else if(objectlayer.name === "checkpoints") {
-            log.info("Processing check points...");
-            var count = 0;
-            _.each(objectlayer.object, function(checkpoint) {
-                var cp = {
-                    id: ++count,
-                    x: checkpoint.x / map.tilesize,
-                    y: checkpoint.y / map.tilesize,
-                    w: checkpoint.width / map.tilesize,
-                    h: checkpoint.height / map.tilesize
-                };
-                if(mode === "server") {
-                    cp.s = checkpoint.type ? 1 : 0;
-                }
-                map.checkpoints.push(cp);
             });
         }
     });
@@ -223,12 +139,10 @@ module.exports = function processMap(json, options) {
         processLayer(Tiled.layer);
     }
     
-    if(mode === "client") {
-        // Set all undefined tiles to 0
-        for(var i=0, max=map.data.length; i < max; i+=1) {
-            if(!map.data[i]) {
-                map.data[i] = 0;
-            }
+    // Set all undefined tiles to 0
+    for(var i=0, max=map.data.length; i < max; i+=1) {
+        if(!map.data[i]) {
+            map.data[i] = 0;
         }
     }
       
@@ -236,24 +150,20 @@ module.exports = function processMap(json, options) {
 };
 
 var processLayer = function processLayer(layer) {
-    if(mode === "server") {
-        // Mobs
-        if(layer.name === "entities") {
-            log.info("Processing positions of static entities ...");
-            var tiles = layer.data.tile;
-            
-            for(var j=0; j < tiles.length; j += 1) {
-                var gid = tiles[j].gid - mobsFirstgid + 1;
-                if(gid && gid > 0) {
-                    map.staticEntities[j] = staticEntities[gid];
-                }
+    var tiles = layer.data.tile;
+
+    if(layer.name === "entities") {
+        log.info("Processing positions of static entities ...");
+        var tiles = layer.data.tile;
+        
+        for(var j=0; j < tiles.length; j += 1) {
+            var gid = tiles[j].gid - mobsFirstgid + 1;
+            if(gid && gid > 0) {
+                map.staticEntities[j] = staticEntities[gid];
             }
         }
-    }
-   
-    var tiles = layer.data.tile;
-    
-    if(mode === "client" && layer.name === "blocking") {
+    } 
+    else if(layer.name === "blocking") {
         log.info("Processing blocking tiles...");
         for(var i=0; i < tiles.length; i += 1) {
             var gid = tiles[i].gid;
@@ -263,7 +173,7 @@ var processLayer = function processLayer(layer) {
             }
         }
     }
-    else if(mode === "client" && layer.name === "plateau") {
+    else if(layer.name === "plateau") {
         log.info("Processing plateau tiles...");
         for(var i=0; i < tiles.length; i += 1) {
             var gid = tiles[i].gid;
@@ -279,18 +189,16 @@ var processLayer = function processLayer(layer) {
         for(var j=0; j < tiles.length; j += 1) {
             var gid = tiles[j].gid;
 
-            if(mode === "client") {
-                // Set tile gid in the tilesheet
-                if(gid > 0) {
-                    if(map.data[j] === undefined) {
-                        map.data[j] = gid;
-                    }
-                    else if(map.data[j] instanceof Array) {
-                        map.data[j].unshift(gid);
-                    }
-                    else {
-                        map.data[j] = [gid, map.data[j]];
-                    }
+            // Set tile gid in the tilesheet
+            if(gid > 0) {
+                if(map.data[j] === undefined) {
+                    map.data[j] = gid;
+                }
+                else if(map.data[j] instanceof Array) {
+                    map.data[j].unshift(gid);
+                }
+                else {
+                    map.data[j] = [gid, map.data[j]];
                 }
             }
             

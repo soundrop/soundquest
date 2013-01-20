@@ -1,7 +1,7 @@
 define(['bubble', 'renderer', 'map', 'animation', 'sprite', 'tile', 'updater',
-        'transition', 'pathfinder', 'npc', 'player', 'character', 'client', 'spaces', 'config',
+        'transition', 'pathfinder', 'entityfactory', 'npc', 'player', 'character', 'client', 'spaces', 'config',
         'gametypes'], function(BubbleManager, Renderer, Map, Animation, Sprite, AnimatedTile,
-         Updater, Transition, Pathfinder, Npc, Player, Character, Client, SpaceManager, config) {
+         Updater, Transition, Pathfinder, EntityFactory, Npc, Player, Character, Client, SpaceManager, config) {
 
     var Game = Class.extend({
         init: function(app) {
@@ -108,6 +108,27 @@ define(['bubble', 'renderer', 'map', 'animation', 'sprite', 'tile', 'updater',
             this.player.idle();
         
             log.debug("Finished initPlayer");
+        },
+
+        initNPCs: function() {
+            log.debug("Loading NPCs: ");
+            console.dir(this.map.staticEntities);
+            _.each(this.map.staticEntities, function(kindName, tid) {
+                try {
+                    log.debug("Loading NPC: " + kindName);
+                    var kind = Types.getKindFromString(kindName),
+                        pos = this.map.tileIndexToGridPosition(tid),
+                        entity = EntityFactory.createEntity(kind, '8'+pos.x+''+pos.y);
+
+                    log.debug(kind);
+                    entity.setSprite(this.sprites[kindName]);
+                    entity.setGridPosition(pos.x, pos.y);
+                    entity.setOrientation(Types.Orientations.DOWN);
+                    entity.idle();
+
+                    this.addEntity(entity);
+                } catch (e) {};
+            }.bind(this));
         },
 
         initShadows: function() {
@@ -408,6 +429,7 @@ define(['bubble', 'renderer', 'map', 'animation', 'sprite', 'tile', 'updater',
                     self.setPathfinder(new Pathfinder(self.map.width, self.map.height));
             
                     self.initPlayer();
+                    self.initNPCs();
                     self.setCursor("hand");
                     
                     self.connect(credentials, started_callback);

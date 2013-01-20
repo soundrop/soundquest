@@ -107,7 +107,7 @@ define(["soundrop", "soundrop.spotify"], function(soundrop) {
                         displayName = this.client.user.get('display_name');
                     }
                     else {
-                        userId = randomId;
+                        userId = randomId();
                         displayName = "Anonymous Coward";
                     }
                     this.connected_callback(userId, displayName);
