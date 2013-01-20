@@ -471,7 +471,7 @@ define(['bubble', 'renderer', 'map', 'animation', 'sprite', 'tile', 'updater',
 
                 self.started = true;
 
-                self.player.setGridPosition(37, 228); // TODO: put at the right place
+                self.player.setGridPosition(50, 238); // TODO: put at the right place
 
                 self.resetCamera();
                 self.updatePlateauMode();

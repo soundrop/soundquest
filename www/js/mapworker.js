@@ -12,7 +12,7 @@ function generateCollisionGrid() {
     var tileIndex = 0;
 
     mapData.grid = [];
-    for(var	j, i = 0; i < mapData.height; i++) {
+    for(var j, i = 0; i < mapData.height; i++) {
         mapData.grid[i] = [];
         for(j = 0; j < mapData.width; j++) {
             mapData.grid[i][j] = 0;
