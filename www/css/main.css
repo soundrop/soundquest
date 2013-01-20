@@ -502,7 +502,7 @@ footer, header, hgroup, menu, nav, section {
         #weapon {left:312px;top:3px;background-size:288px;}
         #armor {left:363px;top:3px;}
 
-        #notifications {width:588px;margin-left:-294px;font-size:20px;color:#eee;top:6px;height:45px;}
+        #notifications {width:588px;margin-left:-294px;font-size:20px;color:rgba(110, 110, 110, 0.5);top:6px;height:45px;}
         #notifications div.top {top:-45px;}
         #notifications span {line-height:45px;height:45px;}
 
@@ -662,7 +662,7 @@ footer, header, hgroup, menu, nav, section {
         #weapon {left:208px;top:2px;}
         #armor {left:242px;top:2px;}
 
-        #notifications {width:392px;margin-left:-196px;font-size:16px;color:#eee;top:2px;height:30px;}
+        #notifications {width:392px;margin-left:-196px;font-size:16px;color:color:rgba(110, 110, 110, 0.5);top:2px;height:30px;}
         #notifications div.top {top:-30px;}
         #notifications span {line-height:30px;height:30px;}
         .windows #notifications span {line-height:34px;}
@@ -823,7 +823,7 @@ footer, header, hgroup, menu, nav, section {
         #weapon {left:208px;top:2px;}
         #armor {left:242px;top:2px;}
 
-        #notifications {width:392px;margin-left:-196px;font-size:16px;color:#eee;top:2px;height:30px;}
+        #notifications {width:392px;margin-left:-196px;font-size:20px;color:rgba(110, 110, 110);top:15px;height:30px;}
         #notifications div.top {top:-30px;}
         #notifications span {line-height:30px;height:30px;}
         .windows #notifications span {line-height:34px;}
@@ -982,7 +982,7 @@ footer, header, hgroup, menu, nav, section {
         #weapon {left:104px;top:1px;}
         #armor {left:121px;top:1px;}
 
-        #notifications {width:196px;margin-left:-98px;font-size:10px;color:#eee;top:2px;height:15px;}
+        #notifications {width:196px;margin-left:-98px;font-size:10px;color:rgba(110, 110, 110, 0.5);top:2px;height:15px;}
         #notifications div.top {top:-15px;}
         #notifications span {line-height:15px;height:15px;}
 
