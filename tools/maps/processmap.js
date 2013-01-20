@@ -2,7 +2,7 @@
 var Log = require('log'),
     _ = require('underscore'),
     log = new Log(Log.DEBUG),
-    Types = require("../../shared/js/gametypes");
+    Types = require("../../www/js/gametypes");
 
 var map,
     mode,
@@ -250,7 +250,7 @@ var processLayer = function processLayer(layer) {
             }
         }
     }
-    
+   
     var tiles = layer.data.tile;
     
     if(mode === "client" && layer.name === "blocking") {
