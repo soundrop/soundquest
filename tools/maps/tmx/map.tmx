@@ -4087,7 +4087,7 @@
  </layer>
  <layer name="Houses" width="172" height="314">
   <data encoding="base64" compression="zlib">
-   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
+   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
   </data>
  </layer>
  <layer name="dryground" width="172" height="314">
@@ -4477,7 +4477,7 @@
     <property name="y" value="135"/>
    </properties>
   </object>
-  <object x="816" y="3280" width="16" height="16">
+  <object x="800" y="3264" width="32" height="32">
    <properties>
     <property name="cx" value="147"/>
     <property name="cy" value="138"/>
@@ -4977,7 +4977,7 @@
     <property name="y" value="137"/>
    </properties>
   </object>
-  <object x="432" y="3344" width="16" height="16">
+  <object x="416" y="3328" width="32" height="32">
    <properties>
     <property name="cx" value="148"/>
     <property name="cy" value="281"/>
@@ -5382,19 +5382,79 @@
   </data>
  </layer>
  <objectgroup name="music" width="172" height="314" visible="0">
-  <object x="2240" y="768" width="480" height="416">
+  <object x="64" y="2320" width="1296" height="576">
    <properties>
-    <property name="id" value="VjWCayQ8GaB04GHI"/>
+    <property name="id" value="forest"/>
    </properties>
   </object>
-  <object x="1936" y="2144" width="176" height="160">
+  <object x="16" y="3120" width="1344" height="928">
    <properties>
-    <property name="id" value="VhzLPcWDnXhakl0c"/>
+    <property name="id" value="village"/>
    </properties>
   </object>
-  <object x="2384" y="2144" width="176" height="160">
+  <object x="1792" y="3088" width="928" height="800">
    <properties>
-    <property name="id" value="Vw6Dov1QSDROz230"/>
+    <property name="id" value="cave"/>
+   </properties>
+  </object>
+  <object x="1760" y="1664" width="960" height="320">
+   <properties>
+    <property name="id" value="cave"/>
+   </properties>
+  </object>
+  <object x="32" y="4240" width="1344" height="592">
+   <properties>
+    <property name="id" value="beach"/>
+   </properties>
+  </object>
+  <object x="16" y="16" width="1808" height="960">
+   <properties>
+    <property name="id" value="lavaland"/>
+   </properties>
+  </object>
+  <object x="2240" y="768" width="464" height="400">
+   <properties>
+    <property name="id" value="boss"/>
+   </properties>
+  </object>
+  <object x="64" y="1136" width="1296" height="992">
+   <properties>
+    <property name="id" value="desert"/>
+   </properties>
+  </object>
+  <object x="1760" y="1296" width="960" height="320">
+   <properties>
+    <property name="id" value="lavaland"/>
+   </properties>
+  </object>
+  <object x="2240" y="384" width="480" height="256">
+   <properties>
+    <property name="id" value="desert"/>
+   </properties>
+  </object>
+  <object x="1792" y="2496" width="480" height="256">
+   <properties>
+    <property name="id" value="beach"/>
+   </properties>
+  </object>
+  <object x="1808" y="4000" width="912" height="432">
+   <properties>
+    <property name="id" value="desert"/>
+   </properties>
+  </object>
+  <object x="2400" y="224" width="160" height="128">
+   <properties>
+    <property name="id" value="desert"/>
+   </properties>
+  </object>
+  <object x="2320" y="2496" width="320" height="256">
+   <properties>
+    <property name="id" value="lavaland"/>
+   </properties>
+  </object>
+  <object x="2336" y="2816" width="320" height="256">
+   <properties>
+    <property name="id" value="lavaland"/>
    </properties>
   </object>
  </objectgroup>
