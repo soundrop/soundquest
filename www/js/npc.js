@@ -32,20 +32,19 @@ define(['character'], function(Character) {
         ],
     
         "villager": [
-            "Howdy stranger. Do you like poetry?",
-            "Roses are red, violets are blue...",
-            "I like hunting rats, and so do you...",
-            "The rats are dead, now what to do?",
-            "To be honest, I have no clue.",
-            "Maybe the forest, could interest you...",
-            "or instead, cook a rat stew."
+            "OMG! Call 911",
+            "...",
+            "...",
+            "...",
+            "Hurry up!"
         ],
     
         "agent": [
-            "Do not try to bend the sword",
-            "That's impossible",
-            "Instead, only try to realize the truth...",
-            "There is no sword."
+            "Oppa Gangnam Style",
+            "Gangnam Style",
+            "Op, op, op, op",
+            "Eh-eh-eh, eh-eh-eh",
+            "Oppa Gangnam Style"
         ],
     
         "rick": [
@@ -64,13 +63,10 @@ define(['character'], function(Character) {
         ],
         
         "scientist": [
-            "Greetings.",
-            "I am the inventor of these two potions.",
-            "The red one will replenish your health points...",
-            "The orange one will turn you into a firefox and make you invincible...",
-            "But it only lasts for a short while.",
-            "So make good use of it!",
-            "Now if you'll excuse me, I need to get back to my experiments..."
+            "Music is a higher revelation than all wisdom and philosophy",
+            "It is the mediator between the spiritual and sensual life",
+            "Now, why don't you grab me a beer? ignorant...",
+            "You know nothing about music, go dubstep somewhere else"
         ],
     
         "nyan": [
