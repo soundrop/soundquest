@@ -560,6 +560,7 @@ define(['bubble', 'renderer', 'map', 'animation', 'sprite', 'tile', 'updater',
                         }
                         
                         self.updatePlateauMode();
+                        self.spaceManager.updateSpace();
                     }
                 
                     if(self.player.target instanceof Npc) {

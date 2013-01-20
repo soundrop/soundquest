@@ -2,7 +2,7 @@
 import commands
 import sys
 
-SRC_FILE = 'tmx/soundquest.tmx'
+SRC_FILE = 'tmx/map.tmx'
 
 TEMP_FILE = SRC_FILE+'.json'
 

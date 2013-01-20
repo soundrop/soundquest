@@ -5,12 +5,6 @@ define(["area"], function(Area) {
             this.game = game;
             this.currentSpaceId = null;
             this.areas = [];
-
-            this.spaceIds = {
-                "village": "VhzLPcWDnXhakl0c",
-                "forest": "VhzLPcWDnXhakl0a",
-                "beach": "VqE1Yk4y4PpnPxnE",
-            };
         },
 
         addArea: function(x, y, width, height, areaId) {
@@ -39,7 +33,7 @@ define(["area"], function(Area) {
                     return area.contains(entity);
                 });
             if(area) {
-                return this.spaceIds[area.id];
+                return area.id;
             }
         },
     });
