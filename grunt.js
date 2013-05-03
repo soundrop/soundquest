@@ -2,41 +2,42 @@
 module.exports = function(grunt) {
     grunt.initConfig({
         requirejs: {
-            rel: {
-                options: {
-                    modules: [{
-                        name: 'main'
-                    }],
-                    dir: "build/www",
-                    appDir: "www",
-                    baseUrl: ".",
-                    paths: {
-                        'text':          "js/lib/require/text",
-                        'jquery':        "js/lib/jquery/jquery",
-                        'main':          "js/main",
-                        'app':           "js/app"
-                    },
-                    shim: {
-                        'jquery':       { exports: 'jQuery' },
-                    },
+            modules: [{
+                name: 'main'
+            }],
+            dir: "build/www",
+            appDir: "www",
+            baseUrl: "./js",
+            paths: {
+                'class':            "lib/class",
+                'text':             "lib/require.text",
+                'jquery':           "lib/jquery",
+                'underscore':       "lib/underscore",
+                'astar':            "lib/astar",
+                'soundrop':         "lib/soundrop",
+                'soundrop.spotify': "lib/soundrop.spotify"
+            },
+            shim: {
+                'jquery':           { exports: 'jQuery' },
+                'soundrop':         { exports: 'soundrop' },
+                'soundrop.spotify': { exports: 'soundrop.spotify' }
+            },
 
-                    optimizeAllPluginResources: true,
-                    optimize: 'uglify',
-                    uglify: { mangle: true },
-                    stubModules: [ 'text' ],
-                    almond: true,
-                    replaceRequireScript: [{
-                        files: ["build/www/index.html"],
-                        module: 'main',
-                        modulePath: '/js/main'
-                    }],
+            optimizeAllPluginResources: true,
+            optimize: 'uglify',
+            uglify: { mangle: true },
+            stubModules: [ 'text' ],
+            almond: true,
+            replaceRequireScript: [{
+                files: ["build/www/index.html"],
+                module: 'main',
+                modulePath: '/js/main'
+            }],
 
-                    fileExclusionRegExp: /^(\..+|build|grunt\.js|node_modules)$/,
-                    pragmas: { productionExclude: true },
-                    preserveLicenseComments: false,
-                    useStrict: true
-                }
-            }
+            fileExclusionRegExp: /^(\..+|build|grunt\.js|node_modules)$/,
+            pragmas: { productionExclude: true },
+            preserveLicenseComments: false,
+            useStrict: true
         },
         server: {
             dev: { root: "www" },
@@ -50,7 +51,6 @@ module.exports = function(grunt) {
     grunt.registerTask('trim', "Trim for packaging.", function() {
         var fs = require('fs');
         var path = require('path');
-        var targets = grunt.config(['requirejs']);
 
         function rmTreeSync(name) {
             if (!fs.existsSync(name))
@@ -66,18 +66,22 @@ module.exports = function(grunt) {
             }
         };
 
-        for (var target in targets) {
-            var dir = targets[target].options.dir;
-            rmTreeSync(path.join(dir, "build.txt"));
-            rmTreeSync(path.join(dir, "css", "lib"));
-            rmTreeSync(path.join(dir, "css", "app"));
-            rmTreeSync(path.join(dir, "css", "app.less"));
-            rmTreeSync(path.join(dir, "js", "lib"));
-            rmTreeSync(path.join(dir, "js", "app"));
-            rmTreeSync(path.join(dir, "js", "app.coffee"));
-            rmTreeSync(path.join(dir, "i18n"));
-            rmTreeSync(path.join(dir, "html"));
-        }
+        var dir = grunt.config(['requirejs']).dir;
+        rmTreeSync(path.join(dir, "build.txt"));
+        fs.readdirSync(path.join(dir, "js")).filter(function (filename) {
+            return filename !== "main.js";
+        }).forEach(function (filename) {
+            var f = path.join(dir, "js", filename);
+            if (fs.statSync(f).isFile()) {
+                fs.unlinkSync(f);
+            }
+        });
+        fs.readdirSync(path.join(dir, "js", "lib")).filter(function (filename) {
+            return filename !== "log.js";
+        }).forEach(function (filename) {
+            rmTreeSync(path.join(dir, "js", "lib", filename));
+        });
+        rmTreeSync(path.join(dir, "sprites"));
     });
 
     grunt.registerMultiTask('server', "Start a devmode-friendly web server.", function() {
