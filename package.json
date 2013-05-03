@@ -3,7 +3,8 @@
   "version": "0.0.1",
   "private": false,
   "devDependencies": {
-    "log": "~1.3.1",
-    "underscore": "~1.4.3"
+    "connect": "~2.7.2",
+    "grunt": "0.3.x",
+    "grunt-requirejs": "0.2.x"
   }
 }
