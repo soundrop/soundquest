@@ -482,7 +482,7 @@ define(['bubble', 'renderer', 'map', 'animation', 'sprite', 'tile', 'updater',
                 connecting = false; // always in dispatcher mode in the build version
     
             // TODO: client instance
-            this.client = new Client(config.host, config.clientId);
+            this.client = new Client(config.host);
 
             this.client.onConnected(function(sessionId, displayName) {
                 log.info("Connected as: " + displayName);

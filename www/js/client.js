@@ -67,9 +67,8 @@ define(["soundrop", "soundrop.spotify"], function(soundrop) {
     }
 
     var Client = Class.extend({
-        init: function(host, clientId) {
+        init: function(host) {
             this.host = host;
-            this.clientId = clientId;
 
             this.client = null;
             this.spaceId = null;
@@ -92,7 +91,8 @@ define(["soundrop", "soundrop.spotify"], function(soundrop) {
             var options = {
                 host: this.host,
                 client: {
-                    _id: this.clientId,
+                    _id: "WoCKlrfrQbY6biVe",
+                    secret: "ZLnMmc5jfEpFBkZEvEfgpmIbG4TAIIABK7PCrbAMHBv",
                     instance: randomId(),
                     version: "0.1", /* FIXME */
                     country: "SE", /* FIXME */
